@@ -608,6 +608,12 @@ function obtenerDiasRestantes() {
       adminLoginMsg.textContent = 'Clave incorrecta';
     }
   });
+document.getElementById("adminBtn").addEventListener("click", function() {
+  // Aquí va lo que debe pasar al hacer clic
+  console.log("Botón de admin clicado");
+  // Por ejemplo, redirigir:
+  window.location.href = "admin.html"; // o la ruta correcta
+});
 
   if (localStorage.getItem('sala_admin_logged') === '1') {
     isAdmin = true;
