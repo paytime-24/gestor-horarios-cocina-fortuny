@@ -324,8 +324,13 @@
     if (!tipo) { alert('Selecciona tipo.'); return; }
     if (!desde || !hasta) { alert('Selecciona fechas.'); return; }
 
-    const diasSolicitados = diasEntreInclusive(desde, hasta);
-    const disponibles = obtenerDiasPara(empleado);
+   const diasSolicitados = calcularDias(desde, hasta);
+
+// Solo descontar si el tipo de solicitud es "Vacaciones"
+if (tipo === "Vacaciones") {
+  empleado.diasRestantes -= diasSolicitados;
+  if (empleado.diasRestantes < 0) empleado.diasRestantes = 0; // evitar negativos
+}
 
     if (tipo === 'Vacaciones' && diasSolicitados > disponibles) {
       if (!confirm(`Atención: ${empleado} solo tiene ${disponibles} días. ¿Enviar de todos modos?`)) return;
@@ -443,6 +448,14 @@
     mostrarTablaAdmin();
     renderizarEventos();
   }
+// Si era de tipo vacaciones, devolver los días
+if (solicitud.tipo === "Vacaciones") {
+  const empleado = empleados.find(e => e.nombre === solicitud.nombre);
+  if (empleado) {
+    empleado.diasRestantes += calcularDias(solicitud.desde, solicitud.hasta);
+    if (empleado.diasRestantes > 30) empleado.diasRestantes = 30; // máximo 30
+  }
+}
 
   function mostrarTablaAdmin() {
     const wrap = document.getElementById('adminTableWrap');
