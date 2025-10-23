@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Gestor de horarios - Cocina FORTUNY</title>
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
+
+  <style>
+    :root{
+      --bg:#f0f1f2;        /* gris muy claro */
+      --panel:#ffffff;     /* blanco tarjetas */
+      --accent:#234a3a;    /* verde oscuro */
+      --accent-soft:#3f6b58;
+      --muted:#d6d9d9;     /* borde suave */
+      --text:#222;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background:var(--bg);
+      color:var(--text);
+      -webkit-font-smoothing:antialiased;
+    }
+    header{
+      background:linear-gradient(90deg,var(--accent) 0%, #2f5f4f 100%);
+      color:white;
+      padding:16px 12px;
+      text-align:center;
+      box-shadow:0 4px 10px rgba(0,0,0,0.06);
+    }
+    header h1{ margin:0; font-size:1.2rem; font-weight:700; letter-spacing:0.3px; }
+    .wrap{
+      max-width:980px;
+      margin:22px auto;
+      padding:0 14px 60px;
+    }
+    .top-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    #infoEmpleado{
+      background:var(--panel);
+      padding:10px 12px;
+      border-radius:10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    #infoEmpleado select{
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid var(--muted);
+      background: var(--panel);
+      color:var(--text);
+      font-weight:600;
+    }
+    #contador{
+      font-size:0.95rem;
+      color:var(--accent);
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    #adminBtn{
+      background:transparent;
+      border:1px dashed rgba(0,0,0,0.08);
+      padding:6px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      color:var(--accent);
+      font-weight:700;
+    }
+    #calendar{
+      background:var(--panel);
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
+
+    /* modal */
+    .modal {
+      display:none;
+      position:fixed;
+      z-index:60;
+      left:0; top:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.35);
+      justify-content:center;
+      align-items:center;
+    }
+    .modal-content{
+      background:var(--panel);
+      width:92%;
+      max-width:520px;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    }
+    .modal-content h2{ margin:0 0 8px 0; color:var(--accent); }
+    label{ display:block; margin-top:10px; font-weight:700; color:var(--accent); font-size:0.95rem;}
+    input[type="datetime-local"], select, textarea {
+      width:100%;
+      padding:9px 10px;
+      border-radius:8px;
+      border:1px solid var(--muted);
+      margin-top:6px;
+      font-size:0.95rem;
+      background: #fff;
+    }
+    textarea{ resize:vertical; min-height:80px; }
+    .row{ display:flex; gap:8px; align-items:center; margin-top:6px; }
+    .btn {
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:10px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      margin-top:14px;
+    }
+    .btn.secondary{
+      background:#9fb69f;
+      color:#073b2b;
+      margin-left:8px;
+    }
+    .close{ float:right; font-size:20px; cursor:pointer; color:#7a6b63; }
+    .small-muted{font-size:0.9rem;color:#6b6b6b}
+
+    /* event style */
+    .fc-event {
+      border: none;
+      padding:3px 6px;
+      border-radius:6px;
+      font-weight:700;
+      font-size:0.85rem;
+    }
+    .fc .fc-daygrid-event .fc-event-title { color:#073b2b }
+    @media (max-width:700px){
+      .top-row{flex-direction:column;align-items:stretch;}
+    }
+
+    /* admin table */
+    .admin-table { width:100%; border-collapse:collapse; margin-top:10px; }
+    .admin-table th, .admin-table td { padding:8px; border-bottom:1px solid #eee; text-align:left; font-size:0.95rem; }
+    .panel-admin { margin-top:12px; padding:12px; background:#fff; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.04); }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Gestor de horarios - Cocina FORTUNY</h1>
+  </header>
+
+  <div class="wrap">
+    <div class="top-row">
+      <div id="infoEmpleado" aria-hidden="false">
+        <div style="margin-right:8px;font-size:0.95rem;color:var(--accent);font-weight:700">Empleado:</div>
+        <select id="empleadoSelect" aria-label="Selecciona empleado">
+          <option value="">Selecciona tu nombre</option>
+          <option>Rodrigo Cornachini</option>
+          <option>Bernardo Boscan</option>
+          <option>Antonia Constanza</option>
+          <option>Abdelaziz Aboud</option>
+          <option>Jenderson Ramon</option>
+          <option>Leonardo Miller</option>
+          <option>Victor Melo</option>
+          <option>Samuel Abella</option>
+          <option>Alex Gonzalez</option>
+          <option>Carlos Cuervo</option>
+          <option>Miguel Segovia</option>
+          <option>Flore Ferlet</option>
+          <option>Carlos Gutierrez</option>
+          <option>Benjamin Barria</option>
+          <option>Jesus Bautista</option>
+          <option>Vicente Corbi</option>
+          <option>Daniel Rodriguez</option>
+          <option>Yonathan Alipio</option>
+          <option>Algassoume Thiam</option>
+          <option>Wuences Murillo</option>
+          <option>Eduardo Membreño</option>
+        </select>
+      </div>
+
+      <div style="display:flex;gap:12px;align-items:center">
+        <div id="contador">Días disponibles: <span id="diasRestantes">30</span></div>
+        <button id="adminBtn" title="Entrar administrador">Entrar administrador</button>
+      </div>
+    </div>
+
+    <div id="calendar"></div>
+  </div>
+
+  <!-- Modal (formulario) -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal-content" role="document">
+      <span class="close" id="closeModal">&times;</span>
+      <h2>Solicitud de tiempo</h2>
+
+      <form id="solicitudForm" aria-label="Formulario de solicitud">
+        <label for="tipo">Tipo de solicitud</label>
+        <select id="tipo" required>
+          <option value="">Selecciona tipo</option>
+          <option>Vacaciones</option>
+          <option>Día libre</option>
+          <option>Asuntos propios</option>
+        </select>
+
+        <div class="row">
+          <div style="flex:1">
+            <label for="desde">Desde (fecha y hora)</label>
+            <input id="desde" type="datetime-local" required>
+          </div>
+          <div style="flex:1">
+            <label for="hasta">Hasta (fecha y hora)</label>
+            <input id="hasta" type="datetime-local" required>
+          </div>
+        </div>
+
+        <button type="button" id="todoDia" class="btn secondary">Todo el día</button>
+
+        <label for="comentarios">Comentarios (opcional)</label>
+        <textarea id="comentarios" placeholder="Motivo, notas..."></textarea>
+
+        <div style="display:flex;gap:8px;">
+          <button class="btn" type="submit">Enviar solicitud</button>
+          <button class="btn secondary" type="button" id="cancelBtn">Cancelar</button>
+        </div>
+        <div style="margin-top:8px" class="small-muted">La solicitud llegará a RRHH para su gestión.</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin modal -->
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="modal-content" style="max-width:420px">
+      <span class="close" id="closeAdmin">&times;</span>
+      <h2>Acceso administrador</h2>
+      <p class="small-muted">Introduce la clave para ver todas las solicitudes.</p>
+      <input id="adminPassword" type="password" placeholder="Clave administradora">
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="enterAdmin" class="btn">Entrar</button>
+        <button id="closeAdminBtn" class="btn secondary">Cerrar</button>
+      </div>
+      <div id="adminMsg" style="margin-top:10px;color:#8a3d3d;font-weight:700;"></div>
+    </div>
+  </div>
+
+  <!-- FullCalendar + EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+
+  <script>
+  /******************************************
+   CONFIG: EmailJS (misma configuración)
+  ******************************************/
+  emailjs.init("Q6R8TiTO6mPO8Bzxt"); // public key (tuya)
+  const SERVICE_ID = "service_6wnk6kc";
+  const TEMPLATE_ID = "template_lwbjymg";
+
+  /******************************************
+   CONSTANTES Y ESTADO
+  ******************************************/
+  const DIAS_VACACIONES_TOTALES = 30;
+  const CALENDAR_START = '2025-10-01';
+  const CALENDAR_END = '2026-12-31';
+  const ADMIN_PASSWORD = 'cocina2025'; // clave admin para cocina
+
+  let isAdmin = false;
+  let selectedDateISO = null;
+  const empleadoSelect = document.getElementById('empleadoSelect');
+  const diasRestantesEl = document.getElementById('diasRestantes');
+
+  /******************************************
+   Storage helpers: eventos y dias
+  ******************************************/
+  function obtenerEventos() {
+    const raw = localStorage.getItem('og_cocina_events_v1');
+    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
+  }
+  function guardarEventos(evts) { localStorage.setItem('og_cocina_events_v1', JSON.stringify(evts)); }
+
+  function obtenerDiasPara(empleado) {
+    if (!empleado) return DIAS_VACACIONES_TOTALES;
+    const key = 'og_cocina_dias_' + empleado;
+    const raw = localStorage.getItem(key);
+    if (raw === null) { localStorage.setItem(key, String(DIAS_VACACIONES_TOTALES)); return DIAS_VACACIONES_TOTALES; }
+    return Number(raw);
+  }
+  function guardarDiasPara(empleado, dias) { if (!empleado) return; localStorage.setItem('og_cocina_dias_' + empleado, String(dias)); }
+
+  /******************************************
+   Inicializa empleado seleccionado (persistente)
+  ******************************************/
+  const storedEmpleado = localStorage.getItem('og_cocina_empleadoSeleccionado');
+  if (storedEmpleado) empleadoSelect.value = storedEmpleado;
+  function actualizarContadorDisplay(empleado) {
+    diasRestantesEl.textContent = obtenerDiasPara(empleado || empleadoSelect.value || storedEmpleado || '');
+  }
+  actualizarContadorDisplay(empleadoSelect.value || storedEmpleado || '');
+
+  empleadoSelect.addEventListener('change', () => {
+    const nombre = empleadoSelect.value;
+    localStorage.setItem('og_cocina_empleadoSeleccionado', nombre);
+    actualizarContadorDisplay(nombre);
+    renderizarEventos();
+  });
+
+  /******************************************
+   Inicializar FullCalendar
+  ******************************************/
+  const calendarEl = document.getElementById('calendar');
+  const calendar = new FullCalendar.Calendar(calendarEl, {
+    initialView: 'dayGridMonth',
+    initialDate: CALENDAR_START,
+    firstDay: 1, // lunes
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: ''
+    },
+    validRange: { start: CALENDAR_START, end: CALENDAR_END },
+    height: 'auto',
+    dateClick: function(info) {
+      selectedDateISO = info.dateStr;
+      abrirModalConFecha(info.dateStr);
+    },
+    events: []
+  });
+  calendar.render();
+
+  /******************************************
+   Modal: abrir/cerrar y prellenado
+  ******************************************/
+  const modal = document.getElementById('modal');
+  const closeModalBtn = document.getElementById('closeModal');
+  const tipoInput = document.getElementById('tipo');
+  const desdeInput = document.getElementById('desde');
+  const hastaInput = document.getElementById('hasta');
+  const comentariosInput = document.getElementById('comentarios');
+  const todoDiaBtn = document.getElementById('todoDia');
+  const form = document.getElementById('solicitudForm');
+  const cancelBtn = document.getElementById('cancelBtn');
+
+  function abrirModalConFecha(fechaISO) {
+    modal.style.display = 'flex';
+    desdeInput.value = fechaISO + 'T09:00';
+    hastaInput.value = fechaISO + 'T18:00';
+    tipoInput.value = '';
+    comentariosInput.value = '';
+  }
+  function cerrarModal() { modal.style.display = 'none'; }
+
+  closeModalBtn.addEventListener('click', cerrarModal);
+  cancelBtn.addEventListener('click', (e) => { e.preventDefault(); cerrarModal(); });
+  window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+
+  // "Todo el día" setea 00:00 - 23:59
+  todoDiaBtn.addEventListener('click', () => {
+    const desdeVal = desdeInput.value;
+    if (!desdeVal) { alert('Selecciona primero una fecha (haz clic en un día).'); return; }
+    const fecha = desdeVal.split('T')[0];
+    desdeInput.value = fecha + 'T00:00';
+    hastaInput.value = fecha + 'T23:59';
+  });
+
+  /******************************************
+   Utilidad: días inclusive entre fechas
+  ******************************************/
+  function diasEntreInclusive(desdeISO, hastaISO) {
+    const d1 = new Date(desdeISO);
+    const d2 = new Date(hastaISO);
+    const msDia = 1000 * 60 * 60 * 24;
+    const diff = Math.floor((Date.UTC(d2.getFullYear(), d2.getMonth(), d2.getDate()) - Date.UTC(d1.getFullYear(), d1.getMonth(), d1.getDate())) / msDia) + 1;
+    return diff;
+  }
+
+  /******************************************
+   Renderizar eventos (según permisos)
+  ******************************************/
+  function renderizarEventos() {
+    calendar.getEvents().forEach(ev => ev.remove());
+    const allEvents = obtenerEventos();
+    const empleadoActual = empleadoSelect.value || localStorage.getItem('og_cocina_empleadoSeleccionado') || '';
+
+    allEvents.forEach(e => {
+      if (!isAdmin && empleadoActual && e.employee !== empleadoActual) return;
+      const allDay = e.allDay;
+      const start = allDay ? e.fromDate.split('T')[0] : e.fromDate;
+      const fcEvent = {
+        id: e.id,
+        title: isAdmin ? `${e.employee} — ${e.type} (${obtenerDiasPara(e.employee)}d)` : `${e.employee}`,
+        start: start,
+        end: allDay ? nextDateISO(e.toDate.split('T')[0]) : e.toDate,
+        allDay: allDay,
+        backgroundColor: (e.type === 'Vacaciones' ? '#9fb69f' : '#d6e7db'),
+        borderColor: '#2f5f4f',
+        textColor: '#072a20'
+      };
+      calendar.addEvent(fcEvent);
+    });
+  }
+
+  function nextDateISO(ymd) {
+    const d = new Date(ymd);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  }
+
+  /******************************************
+   Envío: EmailJS + guardar + descontar
+  ******************************************/
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const empleado = empleadoSelect.value;
+    const tipo = tipoInput.value;
+    const desde = desdeInput.value;
+    const hasta = hastaInput.value;
+    const comentarios = comentariosInput.value || '';
+
+    if (!empleado) { alert('Selecciona tu nombre.'); return; }
+    if (!tipo) { alert('Selecciona tipo de solicitud.'); return; }
+    if (!desde || !hasta) { alert('Selecciona desde y hasta.'); return; }
+
+    const diasSolicitados = diasEntreInclusive(desde, hasta);
+    const disponibles = obtenerDiasPara(empleado);
+
+    if ((tipo === 'Vacaciones' || tipo === 'Día libre') && diasSolicitados > disponibles) {
+      if (!confirm(`Atención: ${empleado} solo tiene ${disponibles} días. ¿Enviar de todos modos?`)) return;
+    }
+
+    const allDay = (desde.endsWith('T00:00') && (hasta.endsWith('T23:59') || hasta.endsWith('T24:00')));
+    const desdeDate = desde.split('T')[0];
+    const hastaDate = hasta.split('T')[0];
+
+    const asunto = `[${tipo}] ${empleado} — del ${desdeDate} al ${hastaDate}`;
+    const params = {
+      employee: empleado,
+      type: tipo,
+      from_date: desde,
+      to_date: hasta,
+      comments: comentarios,
+      days_requested: diasSolicitados,
+      days_remaining_before: obtenerDiasPara(empleado),
+      all_day: allDay ? "Sí" : "No",
+      subject: asunto,
+      to_email: "chef.fortuny@honestgreens.com"
+    };
+
+    // envío EmailJS
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, params)
+      .then(() => {
+        // guardar evento en localStorage
+        const evts = obtenerEventos();
+        const id = 'evt_' + Date.now();
+        const newEvent = {
+          id,
+          employee: empleado,
+          type: tipo,
+          fromDate: desde,
+          toDate: hasta,
+          comments: comentarios,
+          days: diasSolicitados,
+          allDay: allDay,
+          createdAt: new Date().toISOString()
+        };
+        evts.push(newEvent);
+        guardarEventos(evts);
+
+        // descontar dias si aplica
+        if (tipo === 'Vacaciones' || tipo === 'Día libre') {
+          const actuales = obtenerDiasPara(empleado);
+          const nuevos = Math.max(0, actuales - diasSolicitados);
+          guardarDiasPara(empleado, nuevos);
+        }
+
+        actualizarContadorDisplay(empleado);
+        renderizarEventos();
+
+        alert('✅ Solicitud enviada. Gracias, ' + empleado + '.');
+        cerrarModal();
+        form.reset();
+      })
+      .catch(err => {
+        console.error('EmailJS error:', err);
+        alert('❌ Error al enviar. Revisa la configuración de EmailJS o conexión.');
+      });
+  });
+
+  /******************************************
+   Inicial render y seguridad admin
+  ******************************************/
+  renderizarEventos();
+
+  // Admin modal control
+  const adminBtn = document.getElementById('adminBtn');
+  const adminModal = document.getElementById('adminModal');
+  const closeAdmin = document.getElementById('closeAdmin');
+  const closeAdminBtn = document.getElementById('closeAdminBtn');
+  const enterAdminBtn = document.getElementById('enterAdmin');
+  const adminPasswordInput = document.getElementById('adminPassword');
+  const adminMsg = document.getElementById('adminMsg');
+
+  adminBtn.addEventListener('click', () => {
+    adminModal.style.display = 'flex';
+    adminPasswordInput.value = '';
+    adminMsg.textContent = '';
+  });
+  closeAdmin.addEventListener('click', () => adminModal.style.display = 'none');
+  closeAdminBtn.addEventListener('click', () => adminModal.style.display = 'none');
+  enterAdminBtn.addEventListener('click', () => {
+    const val = (adminPasswordInput.value || '').trim();
+    if (val === ADMIN_PASSWORD) {
+      isAdmin = true;
+      localStorage.setItem('og_cocina_admin', '1');
+      adminModal.style.display = 'none';
+      alert('🔒 Modo administrador activado.');
+      mostrarVistaAdmin();
+    } else {
+      adminMsg.textContent = 'Clave incorrecta';
+    }
+  });
+
+  if (localStorage.getItem('og_cocina_admin') === '1') {
+    isAdmin = true;
+    mostrarVistaAdmin();
+  }
+
+  function mostrarVistaAdmin() {
+    // modifica contador / boton salir
+    document.getElementById('contador').innerHTML = 'Modo administrador — <button id="salirAdmin" class="btn secondary">Salir</button>';
+    document.getElementById('salirAdmin').addEventListener('click', () => {
+      isAdmin = false;
+      localStorage.removeItem('og_cocina_admin');
+      location.reload();
+    });
+
+    // panel admin con tabla y acciones
+    const panel = document.createElement('div');
+    panel.className = 'panel-admin';
+    panel.innerHTML = `
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <button id="verTodos" class="btn secondary">Ver historial</button>
+        <button id="reiniciarDias" class="btn">Reiniciar días a 30</button>
+        <button id="exportCSV" class="btn secondary">Exportar CSV</button>
+      </div>
+      <div id="adminTableWrap"></div>
+    `;
+    document.querySelector('.wrap').insertBefore(panel, document.getElementById('calendar'));
+
+    document.getElementById('verTodos').addEventListener('click', mostrarTablaAdmin);
+    document.getElementById('reiniciarDias').addEventListener('click', () => {
+      if (!confirm('¿Reiniciar días de todos a 30?')) return;
+      const empleados = Array.from(empleadoSelect.options).map(o=>o.value).filter(v=>v);
+      empleados.forEach(emp => guardarDiasPara(emp, DIAS_VACACIONES_TOTALES));
+      alert('Días reiniciados a 30.');
+      actualizarContadorDisplay(empleadoSelect.value || '');
+      renderizarEventos();
+    });
+    document.getElementById('exportCSV').addEventListener('click', exportarCSVAdmin);
+    renderizarEventos();
+  }
+
+  function mostrarTablaAdmin() {
+    const wrap = document.getElementById('adminTableWrap');
+    const evts = obtenerEventos();
+    if (!evts.length) { wrap.innerHTML = '<div class="small-muted">No hay solicitudes</div>'; return; }
+    let html = '<table class="admin-table"><thead><tr><th>Empleado</th><th>Tipo</th><th>Desde</th><th>Hasta</th><th>Días</th><th>Comentarios</th><th>Creado</th></tr></thead><tbody>';
+    evts.slice().reverse().forEach(ev => {
+      html += `<tr><td>${ev.employee} (${obtenerDiasPara(ev.employee)}d)</td><td>${ev.type}</td><td>${ev.fromDate.replace('T',' ')}</td><td>${ev.toDate.replace('T',' ')}</td><td>${ev.days}</td><td>${(ev.comments||'')}</td><td>${new Date(ev.createdAt).toLocaleString()}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    document.getElementById('adminTableWrap').innerHTML = html;
+  }
+
+  function exportarCSVAdmin() {
+    const evts = obtenerEventos();
+    if (!evts.length) { alert('No hay datos para exportar'); return; }
+    const rows = [['Empleado','Tipo','Desde','Hasta','Días','Comentarios','Creado']];
+    evts.forEach(e => rows.push([e.employee,e.type,e.fromDate,e.toDate,e.days,(e.comments||''),e.createdAt]));
+    const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'solicitudes_cocina_fortuny.csv'; a.click(); URL.revokeObjectURL(url);
+  }
+
+  </script>
+</body>
+</html>
