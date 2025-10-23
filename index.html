@@ -10,11 +10,11 @@
 
   <style>
     :root{
-      --bg:#f0f1f2;
-      --panel:#ffffff;
-      --accent:#234a3a;
+      --bg:#f0f1f2;        /* gris muy claro */
+      --panel:#ffffff;     /* blanco tarjetas */
+      --accent:#234a3a;    /* verde oscuro */
       --accent-soft:#3f6b58;
-      --muted:#d6d9d9;
+      --muted:#d6d9d9;     /* borde suave */
       --text:#222;
     }
     *{box-sizing:border-box}
@@ -33,42 +33,133 @@
       box-shadow:0 4px 10px rgba(0,0,0,0.06);
     }
     header h1{ margin:0; font-size:1.2rem; font-weight:700; letter-spacing:0.3px; }
-    .wrap{ max-width:980px; margin:22px auto; padding:0 14px 60px; }
-    .top-row{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
-    #infoEmpleado{ background:var(--panel); padding:10px 12px; border-radius:10px; box-shadow: 0 4px 8px rgba(0,0,0,0.04); display:flex; gap:12px; align-items:center; }
-    #infoEmpleado select{ padding:8px 10px; border-radius:8px; border:1px solid var(--muted); background: var(--panel); color:var(--text); font-weight:600; }
-    #contador{ font-size:0.95rem; color:var(--accent); font-weight:700; display:flex; align-items:center; gap:10px; }
-    #adminBtn{ background:transparent; border:1px dashed rgba(0,0,0,0.08); padding:6px 10px; border-radius:8px; cursor:pointer; color:var(--accent); font-weight:700; }
-    #calendar{ background:var(--panel); border-radius:12px; padding:18px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+    .wrap{
+      max-width:980px;
+      margin:22px auto;
+      padding:0 14px 60px;
+    }
+    .top-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:14px;
+      flex-wrap:wrap;
+    }
+    #infoEmpleado{
+      background:var(--panel);
+      padding:10px 12px;
+      border-radius:10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.04);
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    #infoEmpleado select{
+      padding:8px 10px;
+      border-radius:8px;
+      border:1px solid var(--muted);
+      background: var(--panel);
+      color:var(--text);
+      font-weight:600;
+    }
+    #contador{
+      font-size:0.95rem;
+      color:var(--accent);
+      font-weight:700;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    #adminBtn{
+      background:transparent;
+      border:1px dashed rgba(0,0,0,0.08);
+      padding:6px 10px;
+      border-radius:8px;
+      cursor:pointer;
+      color:var(--accent);
+      font-weight:700;
+    }
+    #calendar{
+      background:var(--panel);
+      border-radius:12px;
+      padding:18px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    }
 
     /* modal */
-    .modal { display:none; position:fixed; z-index:60; left:0; top:0; width:100%; height:100%; background: rgba(0,0,0,0.35); justify-content:center; align-items:center; }
-    .modal-content{ background:var(--panel); width:92%; max-width:520px; border-radius:12px; padding:18px; box-shadow:0 10px 30px rgba(0,0,0,0.18); }
+    .modal {
+      display:none;
+      position:fixed;
+      z-index:60;
+      left:0; top:0;
+      width:100%; height:100%;
+      background: rgba(0,0,0,0.35);
+      justify-content:center;
+      align-items:center;
+    }
+    .modal-content{
+      background:var(--panel);
+      width:92%;
+      max-width:520px;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.18);
+    }
     .modal-content h2{ margin:0 0 8px 0; color:var(--accent); }
-    label{ display:block; margin-top:10px; font-weight:700; color:var(--accent); font-size:0.95rem; }
-    input[type="datetime-local"], select, textarea { width:100%; padding:9px 10px; border-radius:8px; border:1px solid var(--muted); margin-top:6px; font-size:0.95rem; background: #fff; }
+    label{ display:block; margin-top:10px; font-weight:700; color:var(--accent); font-size:0.95rem;}
+    input[type="datetime-local"], select, textarea {
+      width:100%;
+      padding:9px 10px;
+      border-radius:8px;
+      border:1px solid var(--muted);
+      margin-top:6px;
+      font-size:0.95rem;
+      background: #fff;
+    }
     textarea{ resize:vertical; min-height:80px; }
     .row{ display:flex; gap:8px; align-items:center; margin-top:6px; }
-    .btn { background:var(--accent); color:white; border:none; padding:10px 12px; border-radius:8px; cursor:pointer; font-weight:700; margin-top:14px; }
-    .btn.secondary{ background:#9fb69f; color:#073b2b; margin-left:8px; }
+    .btn {
+      background:var(--accent);
+      color:white;
+      border:none;
+      padding:10px 12px;
+      border-radius:8px;
+      cursor:pointer;
+      font-weight:700;
+      margin-top:14px;
+    }
+    .btn.secondary{
+      background:#9fb69f;
+      color:#073b2b;
+      margin-left:8px;
+    }
     .close{ float:right; font-size:20px; cursor:pointer; color:#7a6b63; }
-    .small-muted{font-size:0.9rem;color:#6b6b6b }
+    .small-muted{font-size:0.9rem;color:#6b6b6b}
 
     /* event style */
-    .fc-event { border: none; padding:3px 6px; border-radius:6px; font-weight:700; font-size:0.85rem; }
+    .fc-event {
+      border: none;
+      padding:3px 6px;
+      border-radius:6px;
+      font-weight:700;
+      font-size:0.85rem;
+    }
     .fc .fc-daygrid-event .fc-event-title { color:#073b2b }
-    @media (max-width:700px){ .top-row{flex-direction:column;align-items:stretch;} }
+    @media (max-width:700px){
+      .top-row{flex-direction:column;align-items:stretch;}
+    }
 
     /* admin table */
     .admin-table { width:100%; border-collapse:collapse; margin-top:10px; }
     .admin-table th, .admin-table td { padding:8px; border-bottom:1px solid #eee; text-align:left; font-size:0.95rem; }
     .panel-admin { margin-top:12px; padding:12px; background:#fff; border-radius:8px; box-shadow:0 4px 8px rgba(0,0,0,0.04); }
-
-    .small-action { background:transparent; border:1px solid #ddd; padding:4px 6px; border-radius:6px; cursor:pointer; font-size:0.85rem; margin-left:6px; }
   </style>
 </head>
 <body>
-  <header><h1>Gestor de horarios - Cocina FORTUNY</h1></header>
+  <header>
+    <h1>Gestor de horarios - Cocina FORTUNY</h1>
+  </header>
 
   <div class="wrap">
     <div class="top-row">
@@ -144,7 +235,7 @@
           <button class="btn" type="submit">Enviar solicitud</button>
           <button class="btn secondary" type="button" id="cancelBtn">Cancelar</button>
         </div>
-        <div style="margin-top:8px" class="small-muted">La solicitud quedará guardada y visible para RRHH (modo admin).</div>
+        <div style="margin-top:8px" class="small-muted">La solicitud llegará a RRHH para su gestión.</div>
       </form>
     </div>
   </div>
@@ -154,7 +245,7 @@
     <div class="modal-content" style="max-width:420px">
       <span class="close" id="closeAdmin">&times;</span>
       <h2>Acceso administrador</h2>
-      <p class="small-muted">Introduce la clave para ver y gestionar todas las solicitudes.</p>
+      <p class="small-muted">Introduce la clave para ver todas las solicitudes.</p>
       <input id="adminPassword" type="password" placeholder="Clave administradora">
       <div style="display:flex;gap:8px;margin-top:12px">
         <button id="enterAdmin" class="btn">Entrar</button>
@@ -164,78 +255,53 @@
     </div>
   </div>
 
-  <!-- Edit modal (admin) -->
-  <div id="editModal" class="modal" aria-hidden="true">
-    <div class="modal-content" style="max-width:520px">
-      <span class="close" id="closeEdit">&times;</span>
-      <h2>Editar solicitud</h2>
-      <form id="editForm">
-        <label>Empleado</label>
-        <select id="editEmpleado"></select>
-        <label>Tipo</label>
-        <select id="editTipo">
-          <option>Vacaciones</option>
-          <option>Día libre</option>
-          <option>Asuntos propios</option>
-        </select>
-        <div class="row">
-          <div style="flex:1">
-            <label>Desde</label>
-            <input id="editDesde" type="datetime-local">
-          </div>
-          <div style="flex:1">
-            <label>Hasta</label>
-            <input id="editHasta" type="datetime-local">
-          </div>
-        </div>
-        <label>Comentarios</label>
-        <textarea id="editComentarios"></textarea>
-
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn" type="submit">Guardar cambios</button>
-          <button class="btn secondary" type="button" id="cancelEdit">Cancelar</button>
-        </div>
-      </form>
-    </div>
-  </div>
-
-  <!-- FullCalendar -->
+  <!-- FullCalendar + EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 
   <script>
   /******************************************
-   CONFIGURACIÓN
+   CONFIG: EmailJS (misma configuración)
+  ******************************************/
+  emailjs.init("Q6R8TiTO6mPO8Bzxt"); // public key (tuya)
+  const SERVICE_ID = "service_6wnk6kc";
+  const TEMPLATE_ID = "template_lwbjymg";
+
+  /******************************************
+   CONSTANTES Y ESTADO
   ******************************************/
   const DIAS_VACACIONES_TOTALES = 30;
   const CALENDAR_START = '2025-10-01';
   const CALENDAR_END = '2026-12-31';
-  const ADMIN_PASSWORD = 'cocina2025';
+  const ADMIN_PASSWORD = 'cocina2025'; // clave admin para cocina
 
+  let isAdmin = false;
+  let selectedDateISO = null;
   const empleadoSelect = document.getElementById('empleadoSelect');
   const diasRestantesEl = document.getElementById('diasRestantes');
 
   /******************************************
-   storage helpers (separado para cocina)
+   Storage helpers: eventos y dias
   ******************************************/
   function obtenerEventos() {
-    const raw = localStorage.getItem('cocina_events_v2');
-    try { return raw ? JSON.parse(raw) : []; } catch(e) { return []; }
+    const raw = localStorage.getItem('og_cocina_events_v1');
+    try { return raw ? JSON.parse(raw) : []; } catch(e){ return []; }
   }
-  function guardarEventos(evts) { localStorage.setItem('cocina_events_v2', JSON.stringify(evts)); }
+  function guardarEventos(evts) { localStorage.setItem('og_cocina_events_v1', JSON.stringify(evts)); }
 
   function obtenerDiasPara(empleado) {
     if (!empleado) return DIAS_VACACIONES_TOTALES;
-    const key = 'cocina_dias_' + empleado;
+    const key = 'og_cocina_dias_' + empleado;
     const raw = localStorage.getItem(key);
     if (raw === null) { localStorage.setItem(key, String(DIAS_VACACIONES_TOTALES)); return DIAS_VACACIONES_TOTALES; }
     return Number(raw);
   }
-  function guardarDiasPara(empleado, dias) { if (!empleado) return; const key = 'cocina_dias_' + empleado; localStorage.setItem(key, String(dias)); }
+  function guardarDiasPara(empleado, dias) { if (!empleado) return; localStorage.setItem('og_cocina_dias_' + empleado, String(dias)); }
 
   /******************************************
    Inicializa empleado seleccionado (persistente)
   ******************************************/
-  const storedEmpleado = localStorage.getItem('cocina_empleadoSeleccionado');
+  const storedEmpleado = localStorage.getItem('og_cocina_empleadoSeleccionado');
   if (storedEmpleado) empleadoSelect.value = storedEmpleado;
   function actualizarContadorDisplay(empleado) {
     diasRestantesEl.textContent = obtenerDiasPara(empleado || empleadoSelect.value || storedEmpleado || '');
@@ -244,29 +310,36 @@
 
   empleadoSelect.addEventListener('change', () => {
     const nombre = empleadoSelect.value;
-    localStorage.setItem('cocina_empleadoSeleccionado', nombre);
+    localStorage.setItem('og_cocina_empleadoSeleccionado', nombre);
     actualizarContadorDisplay(nombre);
     renderizarEventos();
   });
 
   /******************************************
-   FullCalendar init
+   Inicializar FullCalendar
   ******************************************/
   const calendarEl = document.getElementById('calendar');
   const calendar = new FullCalendar.Calendar(calendarEl, {
     initialView: 'dayGridMonth',
     initialDate: CALENDAR_START,
-    firstDay: 1,
-    headerToolbar: { left: 'prev,next today', center: 'title', right: '' },
+    firstDay: 1, // lunes
+    headerToolbar: {
+      left: 'prev,next today',
+      center: 'title',
+      right: ''
+    },
     validRange: { start: CALENDAR_START, end: CALENDAR_END },
     height: 'auto',
-    dateClick: function(info) { abrirModalConFecha(info.dateStr); },
+    dateClick: function(info) {
+      selectedDateISO = info.dateStr;
+      abrirModalConFecha(info.dateStr);
+    },
     events: []
   });
   calendar.render();
 
   /******************************************
-   Modal (crear)
+   Modal: abrir/cerrar y prellenado
   ******************************************/
   const modal = document.getElementById('modal');
   const closeModalBtn = document.getElementById('closeModal');
@@ -286,11 +359,13 @@
     comentariosInput.value = '';
   }
   function cerrarModal() { modal.style.display = 'none'; }
-  closeModalBtn.addEventListener('click', cerrarModal);
-  cancelBtn.addEventListener('click', (e)=>{ e.preventDefault(); cerrarModal(); });
-  window.addEventListener('click', (e)=>{ if (e.target === modal) cerrarModal(); });
 
-  todoDiaBtn.addEventListener('click', ()=>{
+  closeModalBtn.addEventListener('click', cerrarModal);
+  cancelBtn.addEventListener('click', (e) => { e.preventDefault(); cerrarModal(); });
+  window.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+
+  // "Todo el día" setea 00:00 - 23:59
+  todoDiaBtn.addEventListener('click', () => {
     const desdeVal = desdeInput.value;
     if (!desdeVal) { alert('Selecciona primero una fecha (haz clic en un día).'); return; }
     const fecha = desdeVal.split('T')[0];
@@ -299,7 +374,7 @@
   });
 
   /******************************************
-   Util: días inclusive
+   Utilidad: días inclusive entre fechas
   ******************************************/
   function diasEntreInclusive(desdeISO, hastaISO) {
     const d1 = new Date(desdeISO);
@@ -310,72 +385,23 @@
   }
 
   /******************************************
-   Crear solicitud (no envía correo)
-  ******************************************/
-  form.addEventListener('submit', function(e){
-    e.preventDefault();
-    const empleado = empleadoSelect.value;
-    const tipo = tipoInput.value;
-    const desde = desdeInput.value;
-    const hasta = hastaInput.value;
-    const comentarios = comentariosInput.value || '';
-
-    if (!empleado) { alert('Selecciona tu nombre.'); return; }
-    if (!tipo) { alert('Selecciona tipo.'); return; }
-    if (!desde || !hasta) { alert('Selecciona fechas.'); return; }
-
-   const diasSolicitados = calcularDias(desde, hasta);
-
-// Solo descontar si el tipo de solicitud es "Vacaciones"
-if (tipo === "Vacaciones") {
-  empleado.diasRestantes -= diasSolicitados;
-  if (empleado.diasRestantes < 0) empleado.diasRestantes = 0; // evitar negativos
-}
-
-    if (tipo === 'Vacaciones' && diasSolicitados > disponibles) {
-      if (!confirm(`Atención: ${empleado} solo tiene ${disponibles} días. ¿Enviar de todos modos?`)) return;
-    }
-
-    const allDay = (desde.endsWith('T00:00') && (hasta.endsWith('T23:59') || hasta.endsWith('T24:00')));
-
-    // construir evento y guardarlo
-    const evts = obtenerEventos();
-    const id = 'evt_' + Date.now();
-    const newEvent = { id, employee: empleado, type: tipo, fromDate: desde, toDate: hasta, comments: comentarios, days: diasSolicitados, allDay, createdAt: new Date().toISOString() };
-    evts.push(newEvent);
-    guardarEventos(evts);
-
-    // descontar solo si Vacaciones
-    if (tipo === 'Vacaciones') {
-      const actuales = obtenerDiasPara(empleado);
-      const nuevos = Math.max(0, actuales - diasSolicitados);
-      guardarDiasPara(empleado, nuevos);
-    }
-
-    actualizarContadorDisplay(empleado);
-    renderizarEventos();
-
-    alert('✅ Solicitud guardada. (no se envió correo)');
-    cerrarModal();
-    form.reset();
-  });
-
-  /******************************************
-   Render eventos según permisos
+   Renderizar eventos (según permisos)
   ******************************************/
   function renderizarEventos() {
     calendar.getEvents().forEach(ev => ev.remove());
-    const evts = obtenerEventos();
-    const current = empleadoSelect.value || localStorage.getItem('cocina_empleadoSeleccionado') || '';
-    evts.forEach(e=>{
-      if (!isAdmin && current && e.employee !== current) return;
-      const start = e.allDay ? e.fromDate.split('T')[0] : e.fromDate;
+    const allEvents = obtenerEventos();
+    const empleadoActual = empleadoSelect.value || localStorage.getItem('og_cocina_empleadoSeleccionado') || '';
+
+    allEvents.forEach(e => {
+      if (!isAdmin && empleadoActual && e.employee !== empleadoActual) return;
+      const allDay = e.allDay;
+      const start = allDay ? e.fromDate.split('T')[0] : e.fromDate;
       const fcEvent = {
         id: e.id,
         title: isAdmin ? `${e.employee} — ${e.type} (${obtenerDiasPara(e.employee)}d)` : `${e.employee}`,
         start: start,
-        end: e.allDay ? nextDateISO(e.toDate.split('T')[0]) : e.toDate,
-        allDay: e.allDay,
+        end: allDay ? nextDateISO(e.toDate.split('T')[0]) : e.toDate,
+        allDay: allDay,
         backgroundColor: (e.type === 'Vacaciones' ? '#9fb69f' : '#d6e7db'),
         borderColor: '#2f5f4f',
         textColor: '#072a20'
@@ -384,14 +410,99 @@ if (tipo === "Vacaciones") {
     });
   }
 
-  function nextDateISO(ymd) { const d = new Date(ymd); d.setDate(d.getDate()+1); return d.toISOString().split('T')[0]; }
-
-  renderizarEventos();
+  function nextDateISO(ymd) {
+    const d = new Date(ymd);
+    d.setDate(d.getDate() + 1);
+    return d.toISOString().split('T')[0];
+  }
 
   /******************************************
-   ADMIN: abrir modal, entrar, ver tabla, editar, eliminar
+   Envío: EmailJS + guardar + descontar
   ******************************************/
-  let isAdmin = false;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    const empleado = empleadoSelect.value;
+    const tipo = tipoInput.value;
+    const desde = desdeInput.value;
+    const hasta = hastaInput.value;
+    const comentarios = comentariosInput.value || '';
+
+    if (!empleado) { alert('Selecciona tu nombre.'); return; }
+    if (!tipo) { alert('Selecciona tipo de solicitud.'); return; }
+    if (!desde || !hasta) { alert('Selecciona desde y hasta.'); return; }
+
+    const diasSolicitados = diasEntreInclusive(desde, hasta);
+    const disponibles = obtenerDiasPara(empleado);
+
+    if ((tipo === 'Vacaciones' || tipo === 'Día libre') && diasSolicitados > disponibles) {
+      if (!confirm(`Atención: ${empleado} solo tiene ${disponibles} días. ¿Enviar de todos modos?`)) return;
+    }
+
+    const allDay = (desde.endsWith('T00:00') && (hasta.endsWith('T23:59') || hasta.endsWith('T24:00')));
+    const desdeDate = desde.split('T')[0];
+    const hastaDate = hasta.split('T')[0];
+
+    const asunto = `[${tipo}] ${empleado} — del ${desdeDate} al ${hastaDate}`;
+    const params = {
+      employee: empleado,
+      type: tipo,
+      from_date: desde,
+      to_date: hasta,
+      comments: comentarios,
+      days_requested: diasSolicitados,
+      days_remaining_before: obtenerDiasPara(empleado),
+      all_day: allDay ? "Sí" : "No",
+      subject: asunto,
+      to_email: "chef.fortuny@honestgreens.com"
+    };
+
+    // envío EmailJS
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, params)
+      .then(() => {
+        // guardar evento en localStorage
+        const evts = obtenerEventos();
+        const id = 'evt_' + Date.now();
+        const newEvent = {
+          id,
+          employee: empleado,
+          type: tipo,
+          fromDate: desde,
+          toDate: hasta,
+          comments: comentarios,
+          days: diasSolicitados,
+          allDay: allDay,
+          createdAt: new Date().toISOString()
+        };
+        evts.push(newEvent);
+        guardarEventos(evts);
+
+        // descontar dias si aplica
+        if (tipo === 'Vacaciones' || tipo === 'Día libre') {
+          const actuales = obtenerDiasPara(empleado);
+          const nuevos = Math.max(0, actuales - diasSolicitados);
+          guardarDiasPara(empleado, nuevos);
+        }
+
+        actualizarContadorDisplay(empleado);
+        renderizarEventos();
+
+        alert('✅ Solicitud enviada. Gracias, ' + empleado + '.');
+        cerrarModal();
+        form.reset();
+      })
+      .catch(err => {
+        console.error('EmailJS error:', err);
+        alert('❌ Error al enviar. Revisa la configuración de EmailJS o conexión.');
+      });
+  });
+
+  /******************************************
+   Inicial render y seguridad admin
+  ******************************************/
+  renderizarEventos();
+
+  // Admin modal control
   const adminBtn = document.getElementById('adminBtn');
   const adminModal = document.getElementById('adminModal');
   const closeAdmin = document.getElementById('closeAdmin');
@@ -400,15 +511,18 @@ if (tipo === "Vacaciones") {
   const adminPasswordInput = document.getElementById('adminPassword');
   const adminMsg = document.getElementById('adminMsg');
 
-  adminBtn.addEventListener('click', ()=>{ adminModal.style.display = 'flex'; adminPasswordInput.value=''; adminMsg.textContent=''; });
-  closeAdmin.addEventListener('click', ()=> adminModal.style.display='none');
-  closeAdminBtn.addEventListener('click', ()=> adminModal.style.display='none');
-
-  enterAdminBtn.addEventListener('click', ()=> {
-    const val = (adminPasswordInput.value||'').trim();
+  adminBtn.addEventListener('click', () => {
+    adminModal.style.display = 'flex';
+    adminPasswordInput.value = '';
+    adminMsg.textContent = '';
+  });
+  closeAdmin.addEventListener('click', () => adminModal.style.display = 'none');
+  closeAdminBtn.addEventListener('click', () => adminModal.style.display = 'none');
+  enterAdminBtn.addEventListener('click', () => {
+    const val = (adminPasswordInput.value || '').trim();
     if (val === ADMIN_PASSWORD) {
       isAdmin = true;
-      localStorage.setItem('cocina_admin','1');
+      localStorage.setItem('og_cocina_admin', '1');
       adminModal.style.display = 'none';
       alert('🔒 Modo administrador activado.');
       mostrarVistaAdmin();
@@ -417,13 +531,21 @@ if (tipo === "Vacaciones") {
     }
   });
 
-  if (localStorage.getItem('cocina_admin') === '1') { isAdmin = true; mostrarVistaAdmin(); }
+  if (localStorage.getItem('og_cocina_admin') === '1') {
+    isAdmin = true;
+    mostrarVistaAdmin();
+  }
 
   function mostrarVistaAdmin() {
+    // modifica contador / boton salir
     document.getElementById('contador').innerHTML = 'Modo administrador — <button id="salirAdmin" class="btn secondary">Salir</button>';
-    document.getElementById('salirAdmin').addEventListener('click', ()=>{ isAdmin=false; localStorage.removeItem('cocina_admin'); location.reload(); });
+    document.getElementById('salirAdmin').addEventListener('click', () => {
+      isAdmin = false;
+      localStorage.removeItem('og_cocina_admin');
+      location.reload();
+    });
 
-    // panel admin
+    // panel admin con tabla y acciones
     const panel = document.createElement('div');
     panel.className = 'panel-admin';
     panel.innerHTML = `
@@ -437,155 +559,30 @@ if (tipo === "Vacaciones") {
     document.querySelector('.wrap').insertBefore(panel, document.getElementById('calendar'));
 
     document.getElementById('verTodos').addEventListener('click', mostrarTablaAdmin);
-    document.getElementById('reiniciarDias').addEventListener('click', ()=> {
+    document.getElementById('reiniciarDias').addEventListener('click', () => {
       if (!confirm('¿Reiniciar días de todos a 30?')) return;
-      Array.from(empleadoSelect.options).map(o=>o.value).filter(v=>v).forEach(emp => guardarDiasPara(emp, DIAS_VACACIONES_TOTALES));
+      const empleados = Array.from(empleadoSelect.options).map(o=>o.value).filter(v=>v);
+      empleados.forEach(emp => guardarDiasPara(emp, DIAS_VACACIONES_TOTALES));
       alert('Días reiniciados a 30.');
       actualizarContadorDisplay(empleadoSelect.value || '');
       renderizarEventos();
     });
     document.getElementById('exportCSV').addEventListener('click', exportarCSVAdmin);
-    mostrarTablaAdmin();
     renderizarEventos();
   }
-// Si era de tipo vacaciones, devolver los días
-if (solicitud.tipo === "Vacaciones") {
-  const empleado = empleados.find(e => e.nombre === solicitud.nombre);
-  if (empleado) {
-    empleado.diasRestantes += calcularDias(solicitud.desde, solicitud.hasta);
-    if (empleado.diasRestantes > 30) empleado.diasRestantes = 30; // máximo 30
-  }
-}
 
   function mostrarTablaAdmin() {
     const wrap = document.getElementById('adminTableWrap');
     const evts = obtenerEventos();
     if (!evts.length) { wrap.innerHTML = '<div class="small-muted">No hay solicitudes</div>'; return; }
-    let html = '<table class="admin-table"><thead><tr><th>Empleado</th><th>Tipo</th><th>Desde</th><th>Hasta</th><th>Días</th><th>Acciones</th></tr></thead><tbody>';
+    let html = '<table class="admin-table"><thead><tr><th>Empleado</th><th>Tipo</th><th>Desde</th><th>Hasta</th><th>Días</th><th>Comentarios</th><th>Creado</th></tr></thead><tbody>';
     evts.slice().reverse().forEach(ev => {
-      html += `<tr data-id="${ev.id}"><td>${ev.employee} (${obtenerDiasPara(ev.employee)}d)</td><td>${ev.type}</td><td>${ev.fromDate.replace('T',' ')}</td><td>${ev.toDate.replace('T',' ')}</td><td>${ev.days}</td><td>
-        <button class="small-action editBtn" data-id="${ev.id}">✏️ Editar</button>
-        <button class="small-action deleteBtn" data-id="${ev.id}">🗑️ Eliminar</button>
-      </td></tr>`;
+      html += `<tr><td>${ev.employee} (${obtenerDiasPara(ev.employee)}d)</td><td>${ev.type}</td><td>${ev.fromDate.replace('T',' ')}</td><td>${ev.toDate.replace('T',' ')}</td><td>${ev.days}</td><td>${(ev.comments||'')}</td><td>${new Date(ev.createdAt).toLocaleString()}</td></tr>`;
     });
     html += '</tbody></table>';
-    wrap.innerHTML = html;
-
-    // attach events
-    document.querySelectorAll('.deleteBtn').forEach(btn => btn.addEventListener('click', (e)=> {
-      const id = e.currentTarget.getAttribute('data-id');
-      if (!confirm('¿Eliminar esta solicitud?')) return;
-      eliminarSolicitudPorId(id);
-    }));
-    document.querySelectorAll('.editBtn').forEach(btn => btn.addEventListener('click', (e)=> {
-      const id = e.currentTarget.getAttribute('data-id');
-      abrirEditor(id);
-    }));
+    document.getElementById('adminTableWrap').innerHTML = html;
   }
 
-  function eliminarSolicitudPorId(id) {
-    const evts = obtenerEventos();
-    const idx = evts.findIndex(x=>x.id===id);
-    if (idx===-1) return;
-    const ev = evts[idx];
-    // si era Vacaciones, devolver días al empleado (sumamos los días que se iban a restar)
-    if (ev.type === 'Vacaciones') {
-      const actuales = obtenerDiasPara(ev.employee);
-      guardarDiasPara(ev.employee, actuales + ev.days);
-    }
-    evts.splice(idx,1);
-    guardarEventos(evts);
-    alert('Solicitud eliminada.');
-    renderizarEventos();
-    actualizarContadorDisplay(empleadoSelect.value || storedEmpleado || '');
-    mostrarTablaAdmin();
-  }
-
-  /******************************************
-   Editar solicitud (admin)
-  ******************************************/
-  const editModal = document.getElementById('editModal');
-  const closeEdit = document.getElementById('closeEdit');
-  const editEmpleado = document.getElementById('editEmpleado');
-  const editTipo = document.getElementById('editTipo');
-  const editDesde = document.getElementById('editDesde');
-  const editHasta = document.getElementById('editHasta');
-  const editComentarios = document.getElementById('editComentarios');
-  const editForm = document.getElementById('editForm');
-  const cancelEdit = document.getElementById('cancelEdit');
-
-  // poblar select de edit con empleados
-  function poblarEditEmpleado() {
-    editEmpleado.innerHTML = '';
-    Array.from(empleadoSelect.options).forEach(o => {
-      if (!o.value) return;
-      const opt = document.createElement('option'); opt.value = o.value; opt.textContent = o.value;
-      editEmpleado.appendChild(opt);
-    });
-  }
-
-  function abrirEditor(id) {
-    const evts = obtenerEventos();
-    const ev = evts.find(x=>x.id===id);
-    if (!ev) return alert('Evento no encontrado');
-    poblarEditEmpleado();
-    editEmpleado.value = ev.employee;
-    editTipo.value = ev.type;
-    editDesde.value = ev.fromDate;
-    editHasta.value = ev.toDate;
-    editComentarios.value = ev.comments || '';
-    editModal.style.display = 'flex';
-    editForm.setAttribute('data-edit-id', id);
-  }
-
-  closeEdit.addEventListener('click', ()=> editModal.style.display='none');
-  cancelEdit.addEventListener('click', ()=> { editModal.style.display='none'; });
-
-  editForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    const id = editForm.getAttribute('data-edit-id');
-    const evts = obtenerEventos();
-    const idx = evts.findIndex(x=>x.id===id);
-    if (idx===-1) return alert('No encontrado');
-    const antes = evts[idx];
-    const nuevoEmpleado = editEmpleado.value;
-    const nuevoTipo = editTipo.value;
-    const nuevoDesde = editDesde.value;
-    const nuevoHasta = editHasta.value;
-    const nuevoComentarios = editComentarios.value || '';
-    const nuevosDias = diasEntreInclusive(nuevoDesde, nuevoHasta);
-
-    // ajustamos días: si antes era Vacaciones, devolvemos su dias; luego si ahora es Vacaciones, restamos nuevos dias
-    if (antes.type === 'Vacaciones') {
-      const actuales = obtenerDiasPara(antes.employee);
-      guardarDiasPara(antes.employee, actuales + antes.days);
-    }
-
-    // actualizar evento
-    evts[idx].employee = nuevoEmpleado;
-    evts[idx].type = nuevoTipo;
-    evts[idx].fromDate = nuevoDesde;
-    evts[idx].toDate = nuevoHasta;
-    evts[idx].comments = nuevoComentarios;
-    evts[idx].days = nuevosDias;
-    evts[idx].allDay = (nuevoDesde.endsWith('T00:00') && (nuevoHasta.endsWith('T23:59') || nuevoHasta.endsWith('T24:00')));
-
-    // si ahora es Vacaciones restamos dias al empleado nuevo
-    if (nuevoTipo === 'Vacaciones') {
-      const actuales2 = obtenerDiasPara(nuevoEmpleado);
-      guardarDiasPara(nuevoEmpleado, Math.max(0, actuales2 - nuevosDias));
-    }
-
-    guardarEventos(evts);
-    editModal.style.display = 'none';
-    renderizarEventos();
-    mostrarTablaAdmin();
-    alert('Solicitud editada correctamente.');
-  });
-
-  /******************************************
-   Export CSV admin
-  ******************************************/
   function exportarCSVAdmin() {
     const evts = obtenerEventos();
     if (!evts.length) { alert('No hay datos para exportar'); return; }
@@ -595,34 +592,6 @@ if (solicitud.tipo === "Vacaciones") {
     const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
     const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = 'solicitudes_cocina_fortuny.csv'; a.click(); URL.revokeObjectURL(url);
   }
-
-  /******************************************
-   Helper: re-render
-  ******************************************/
-  function renderizarEventos() {
-    calendar.getEvents().forEach(ev => ev.remove());
-    const evts = obtenerEventos();
-    const current = empleadoSelect.value || localStorage.getItem('cocina_empleadoSeleccionado') || '';
-
-    evts.forEach(e=>{
-      if (!isAdmin && current && e.employee !== current) return;
-      const start = e.allDay ? e.fromDate.split('T')[0] : e.fromDate;
-      const fcEvent = {
-        id: e.id,
-        title: isAdmin ? `${e.employee} — ${e.type} (${obtenerDiasPara(e.employee)}d)` : `${e.employee}`,
-        start: start,
-        end: e.allDay ? nextDateISO(e.toDate.split('T')[0]) : e.toDate,
-        allDay: e.allDay,
-        backgroundColor: (e.type === 'Vacaciones' ? '#9fb69f' : '#d6e7db'),
-        borderColor: '#2f5f4f',
-        textColor: '#072a20'
-      };
-      calendar.addEvent(fcEvent);
-    });
-  }
-
-  // make renderizarEventos available (initial call)
-  renderizarEventos();
 
   </script>
 </body>
