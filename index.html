@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>SALA FORTUNY</title>
+  <title>Cocina FORTUNY</title>
 
   <!-- FullCalendar CSS -->
   <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.css" rel="stylesheet" />
@@ -83,7 +83,7 @@
 </head>
 <body>
   <header>
-    <h1>SALA FORTUNY</h1>
+    <h1>Cocina FORTUNY</h1>
     <div class="right">
       <div class="badge">Organizador de días</div>
       <button id="adminTabBtn" class="small" title="ADMIN">ADMIN</button>
@@ -96,7 +96,7 @@
         <div style="margin-right:8px;font-size:0.95rem;color:var(--accent);font-weight:700">Empleado:</div>
         <select id="empleadoSelect" aria-label="Selecciona empleado">
           <option value="">Selecciona tu nombre</option>
-          <!-- Lista del personal (SALA) -->
+          <!-- Lista del personal (cocina) -->
           <option>Rodrigo Cornachini</option>
           <option>Bernardo Boscan</option>
           <option>Antonia Constanza</option>
@@ -278,8 +278,8 @@
   /******************************************
    CONSTANTES Y ESTADO
   ******************************************/
-  const ADMIN_EMAIL = "am.fortuny@honestgreens.com";
-  const ADMIN_PASSWORD = "sala2025";
+  const ADMIN_EMAIL = "chef.fortuny@honestgreens.com";
+  const ADMIN_PASSWORD = "cocina2025";
   const DIAS_VACACIONES_TOTALES = 30;
   const CALENDAR_START = '2025-10-01';
   const CALENDAR_END = '2026-12-31';
@@ -329,7 +329,7 @@
   const e_comments = document.getElementById('e_comments');
 
   /******************************************
-   STORAGE HELPERS (namespaced to sala)
+   STORAGE HELPERS (namespaced to cocina)
   ******************************************/
   function obtenerEventos() {
     const raw = localStorage.getItem('sala_events_v1');
@@ -551,38 +551,6 @@
     emailjs.send(SERVICE_ID, TEMPLATE_ID, params).catch(err => console.warn('EmailJS->admin send failed', err));
     alert('Solicitud creada y notificada a RRHH (guardada localmente).');
   });
-document.getElementById("formulario").addEventListener("submit", function(e) {
-  e.preventDefault();
-
-  const templateParams = {
-    employee: document.getElementById("employee").value,
-    desde_fecha: document.getElementById("from_date").value,
-    to_date: document.getElementById("to_date").value,
-    tipo: document.getElementById("tipo").value,
-    comments: document.getElementById("comments").value,
-    days_requested: calcularDiasSolicitados(),
-    days_remaining_before: obtenerDiasRestantes()
-  };
-
-  emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
-    .then(function(response) {
-      console.log("Correo enviado con éxito", response.status, response.text);
-    }, function(error) {
-      console.error("Error al enviar el correo", error);
-    });
-});
-
-function calcularDiasSolicitados() {
-  const desde = new Date(document.getElementById("from_date").value);
-  const hasta = new Date(document.getElementById("to_date").value);
-  const diferencia = (hasta - desde) / (1000 * 60 * 60 * 24);
-  return diferencia + 1;
-}
-
-function obtenerDiasRestantes() {
-  // Aquí puedes poner tu lógica real
-  return 10; // Ejemplo fijo
-}
 
   /******************************************
    ADMIN: login / panel
@@ -608,12 +576,6 @@ function obtenerDiasRestantes() {
       adminLoginMsg.textContent = 'Clave incorrecta';
     }
   });
-document.getElementById("adminBtn").addEventListener("click", function() {
-  // Aquí va lo que debe pasar al hacer clic
-  console.log("Botón de admin clicado");
-  // Por ejemplo, redirigir:
-  window.location.href = "admin.html"; // o la ruta correcta
-});
 
   if (localStorage.getItem('sala_admin_logged') === '1') {
     isAdmin = true;
@@ -629,7 +591,7 @@ document.getElementById("adminBtn").addEventListener("click", function() {
     panel.className = 'panel-admin';
     panel.innerHTML = `
       <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
-        <div style="font-weight:800;color:var(--accent)">PANEL ADMIN — SALA FORTUNY</div>
+        <div style="font-weight:800;color:var(--accent)">PANEL ADMIN — Cocina FORTUNY</div>
         <div>
           <button id="logoutAdmin" class="btn secondary">Salir ADMIN</button>
         </div>
