@@ -835,50 +835,5 @@
   setInterval(()=> { if (isAdmin) updateSummary(); }, 3000);
 
   </script>
- /* NUEVO: Ajustes para pantallas pequeñas (responsive) */
-    @media (max-width: 600px) {
-      form {
-        padding: 1rem;
-        max-width: 90%;
-      }
-      label, select, input, textarea, button {
-        font-size: 1rem;
-      }
-    }
-  </style>
-</head>
-
-<body>
-
-  <!-- Tu código original comienza aquí -->
-  <form id="formCreate" aria-label="Formulario de solicitud"
-        action="https://formspree.io/f/tu-endpoint" method="POST"> <!-- NUEVO: añadí action y method -->
-
-    <label for="c_employee">Empleado</label>
-    <select id="c_employee" name="empleado" required> <!-- NUEVO: añadí name="empleado" -->
-      <option value="">Selecciona</option>
-      <option value="juan">Juan Pérez</option> <!-- NUEVO: ejemplos -->
-      <option value="maria">María López</option> <!-- NUEVO -->
-      <option value="carlos">Carlos Ruiz</option> <!-- NUEVO -->
-    </select>
-
-    <!-- NUEVO: campos adicionales comunes en una solicitud -->
-    <label for="fecha_inicio">Fecha de inicio</label>
-    <input type="date" id="fecha_inicio" name="fecha_inicio" required />
-
-    <label for="fecha_fin">Fecha de fin</label>
-    <input type="date" id="fecha_fin" name="fecha_fin" required />
-
-    <label for="motivo">Motivo</label>
-    <textarea id="motivo" name="motivo" rows="4" placeholder="Escribe tu motivo..."></textarea>
-
-    <button type="submit">Enviar solicitud</button> <!-- NUEVO: botón de envío -->
-  </form>
-  <!-- Fin de tu código original -->
-
-</body>
-</html>
-
-
 </body>
 </html>
